@@ -15,3 +15,23 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+
+import imgui
+
+stateful_objects = []
+
+class StatefulObject:
+    def __init__(self):
+        super(StatefulObject, self).__init__()
+        stateful_objects.append(self)
+
+    def update(self, time):
+        pass
+
+    def remove_stateful_object(self):
+        stateful_objects.remove(self)
+
+def update(time):
+    for o in stateful_objects:
+        o.update(time)
+

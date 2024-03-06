@@ -15,3 +15,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+
+import imgui
+import hull
+
+class Player:
+    def __init__(self):
+        self.hull = hull.hulls[0]

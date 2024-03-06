@@ -1,2 +1,3 @@
 /dist/
 /.pytest_cache/
+/src/mech_idle/__pycache__/
