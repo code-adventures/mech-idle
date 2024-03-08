@@ -17,7 +17,7 @@
 #
 
 import imgui
-import hull
+from . import hull
 
 class Player:
     def __init__(self):

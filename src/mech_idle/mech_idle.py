@@ -25,11 +25,12 @@ import OpenGL.GL as gl
 import imgui
 from imgui.integrations.pygame import PygameRenderer
 
-import mech
-import hull
-import action
-import drawing
-import update
+from . import mech
+from . import hull
+from . import action
+from . import drawing
+from . import update
+from . import setup
 
 
 def show_mech_information():

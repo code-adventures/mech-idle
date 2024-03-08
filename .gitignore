@@ -1,3 +1,5 @@
 /dist/
 /.pytest_cache/
-/src/mech_idle/__pycache__/
+__pycache__/
+/.coverage
+

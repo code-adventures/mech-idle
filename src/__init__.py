@@ -1,5 +1,3 @@
-#
-#    Mech Idle - an idle mech game
 #    Copyright (C) 2024 Code Adventures
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -14,8 +12,3 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-#
-
-from .vec import Vec2
-
-ACTION_AREA = Vec2(1600, 250)

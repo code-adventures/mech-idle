@@ -22,10 +22,10 @@ import math
 from dataclasses import dataclass
 from random import randrange
 
-import definitions
-from vec import Vec2
-from drawing import Drawable
-from update import StatefulObject
+from . import definitions
+from .vec import Vec2
+from .drawing import Drawable
+from .update import StatefulObject
 
 MECH = Vec2(100, definitions.ACTION_AREA.y / 2)
 MECH_RADIUS = 40

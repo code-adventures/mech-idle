@@ -17,7 +17,7 @@
 #
 
 import imgui
-import definitions
+from . import definitions
 
 drawables = []
 

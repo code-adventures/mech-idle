@@ -16,6 +16,25 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from .vec import Vec2
+from . import hull
 
-ACTION_AREA = Vec2(1600, 250)
+class Setup:
+    def __init__(self):
+        self.hull = None
+        self.modules = dict()
+
+    def setup(self, hull, modules):
+        self.hull = hull
+        self.modules = modules
+        self.check_setup()
+
+    def check_setup(self):
+        if self.hull is None and bool(self.modules): # bool(self.modules) is True when not empty
+            self.modules = dict()
+        if self.hull is not None:
+            for k,v in self.modules.items():
+                c = self.hull.hardpoints[k]
+                v[0] = v[0][:c[0]]    # drop every module after the available number of hardpoints
+                v[1] = v[1][:c[1]]
+
+
