@@ -1,19 +1,19 @@
 # Mech Idle
 
-[![PyPI - Version](https://img.shields.io/pypi/v/mech-idle.svg)](https://pypi.org/project/mech-idle)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/mech-idle.svg)](https://pypi.org/project/mech-idle)
-
 -----
 
 **Table of Contents**
 
-- [Installation](#installation)
+- [Installation / Run](#installation-run)
 - [License](#license)
 
-## Installation
+## Installation / Run
 
 ```console
-pip install mech-idle
+git clone https://github.com/code-adventures/mech-idle.git
+cd mech-idle
+hatch shell
+python -m src.mech_idle.mech_idle
 ```
 
 ## License
