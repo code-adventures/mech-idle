@@ -33,8 +33,8 @@ class Setup:
             self.modules = dict()
         if self.hull is not None:
             for k,v in self.modules.items():
-                c = self.hull.hardpoints[k]
-                v[0] = v[0][:c[0]]    # drop every module after the available number of hardpoints
+                c = self.hull.mountpoints[k]
+                v[0] = v[0][:c[0]]    # drop every module after the available number of mountpoints
                 v[1] = v[1][:c[1]]
 
 

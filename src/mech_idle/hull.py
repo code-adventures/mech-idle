@@ -36,7 +36,7 @@ class Hull:
     id: int
     name: str
     speed: int
-    hardpoints: dict[MountPoints, tuple[int, int]]
+    mountpoints: dict[MountPoints, tuple[int, int]]
 
     @staticmethod
     def create_mountpoints(**mountpoints):
@@ -108,7 +108,7 @@ def show_available_hulls():
     
     with imgui.begin_group():
         imgui.text("Head")
-        hp = m.hardpoints[MountPoints.HEAD]
+        hp = m.mountpoints[MountPoints.HEAD]
         if hp != (0,0):
             for i in range(hp[0]):
                 p.h[i] = show_combo(f"Weapon {i} ", wl, i, p.h[i])
