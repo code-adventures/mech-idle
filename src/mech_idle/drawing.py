@@ -46,12 +46,7 @@ class Transform:
     def scale(self, v):
         return v*self.ratio;
 
-def draw():
-    ratio = imgui.get_window_content_region_width() / definitions.ACTION_AREA.x
-    pos = imgui.get_window_position()
-
-    transform = Transform(pos, ratio)
-    draw_list = imgui.get_window_draw_list()
+def draw(transform, draw_list):
 
     for d in drawables:
         d.draw(transform, draw_list)

@@ -85,7 +85,6 @@ def show_combo(label, items, index, sel):
     return sel
 
 def show_available_hulls():
-# TODO: add LICENSE to source files
     global selected
 
     if width == 0:
@@ -96,8 +95,6 @@ def show_available_hulls():
             is_selected = i == selected
             if (imgui.selectable(d.name, is_selected)[1]):
                 selected = i 
-
-
     m = hulls[selected]
 
     imgui.same_line()

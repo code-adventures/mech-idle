@@ -31,6 +31,7 @@ from . import action
 from . import drawing
 from . import update
 from . import setup
+from . import definitions
 
 
 def show_mech_information():
@@ -68,7 +69,11 @@ def show_action_area():
     imgui.set_next_window_position(0, imgui.get_io().display_size.y - height)
     imgui.set_next_window_size(imgui.get_io().display_size.x, height)
     with imgui.begin("Action", False, flags=imgui.WINDOW_NO_MOVE | imgui.WINDOW_NO_COLLAPSE | imgui.WINDOW_NO_TITLE_BAR | imgui.WINDOW_NO_RESIZE):
-        drawing.draw()
+        ratio = imgui.get_window_content_region_width() / definitions.ACTION_AREA.x
+        pos = imgui.get_window_position()
+        transform = drawing.Transform(pos, ratio)
+        draw_list = imgui.get_window_draw_list()
+        drawing.draw(transform, draw_list)
     return height
 
     
