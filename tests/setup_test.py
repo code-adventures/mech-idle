@@ -27,6 +27,12 @@ class setup_test(unittest.TestCase):
         self.assertEqual(my_setup.hull, None)
         self.assertEqual(my_setup.modules, dict())
 
+    def test_empty_hull_but_modules(self):
+        my_setup = setup.Setup()
+        my_setup.setup(None, {hull.MountPoints.HEAD: [[1,2,3],[1,2,3]]})
+        self.assertEqual(my_setup.hull, None)
+        self.assertEqual(my_setup.modules, dict())
+
     def test_empty_setup(self):
         my_hull = hull.Hull(0, "Test", 1, hull.Hull.create_mountpoints(head=(1,1)))
         my_setup = setup.Setup()

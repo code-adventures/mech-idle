@@ -27,6 +27,7 @@ class ATestStatefulObject(update.StatefulObject):
         self.update_call_time = 0
         
     def update(self, time):
+        super(ATestStatefulObject, self).update(time)
         self.update_calls += 1
         self.update_call_time = time
         
@@ -52,6 +53,18 @@ class update_test(unittest.TestCase):
         self.assertEqual(o1.update_call_time, 113)
         self.assertEqual(o2.update_calls, 1)
         self.assertEqual(o2.update_call_time, 113)
+
+    def test_add_and_remove_object(self):
+        o = ATestStatefulObject()
+        self.assertEqual(o.update_calls, 0)
+        self.assertEqual(o.update_call_time, 0)
+        update.update(113)
+        self.assertEqual(o.update_calls, 1)
+        self.assertEqual(o.update_call_time, 113)
+        o.remove_stateful_object()
+        update.update(234)
+        self.assertEqual(o.update_calls, 1)
+        self.assertEqual(o.update_call_time, 113)
 
 if __name__ == '__main__':
     unittest.main()

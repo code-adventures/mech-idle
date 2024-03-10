@@ -26,6 +26,7 @@ class ATestDrawable(drawing.Drawable):
         self.draw_calls = 0
         
     def draw(self, transform, draw_list):
+        super(ATestDrawable, self).draw(transform, draw_list)
         self.draw_calls += 1
         
 
