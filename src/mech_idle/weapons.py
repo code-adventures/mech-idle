@@ -15,12 +15,24 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+from dataclasses import dataclass
+from .weapon_effects import WeaponEffects
 
-from .vec import Vec2
+@dataclass
+class Weapon:
+    name: str
+    damage: int
+    shield_damage: float
+    armor_damage: float
+    frequency: float
+    range: int
+    effect: object
+    
+class AutoCannon(Weapon):
+    def __init__(self):
+        super(AutoCannon, self).__init__("AutoCannon", 1, 0.2, 0.8, 1.0, 400, WeaponEffects.ROCKET)
 
-ACTION_AREA = Vec2(1600, 250)
-
-MECH = Vec2(100, ACTION_AREA.y / 2)
-MECH_RADIUS = 40
-
-ENEMY_RADIUS = 10
+class BeamLaser(Weapon):
+    def __init__(self):
+        super(BeamLaser, self).__init__("BeamLaser", 3, 0.8, 0.2, 0.3, 800, WeaponEffects.BEAM)
+    
