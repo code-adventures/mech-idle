@@ -15,18 +15,17 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-
-import imgui
 import math
+import imgui
 
-from dataclasses import dataclass
-from random import randrange
+def draw(player):
+    imgui.text("XP: " + str(player.xp))
+    
+    for s in player.skills:
+        imgui.progress_bar(min(1, player.xp / s.get_cost()), (200, 0), f'{min(s.get_cost(), player.xp)}/{s.get_cost()}')
+        imgui.same_line()
+        imgui.text(s.name)
+        if imgui.button(f'Level {s.level+1}'):
+            player.xp -= s.get_cost()
+            s.level += 1
 
-from . import definitions
-from .vec import Vec2
-from .drawing import Drawable
-from .update import StatefulObject
-from . import weapon_effects
-
-def dimensions():
-    return Vec2(definitions.ACTION_AREA.x / 100, definitions.ACTION_AREA.y / 100)

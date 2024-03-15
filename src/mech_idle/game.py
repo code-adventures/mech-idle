@@ -1,3 +1,4 @@
+
 #
 #    Mech Idle - an idle mech game
 #    Copyright (C) 2024 Code Adventures
@@ -16,17 +17,25 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import imgui
-import math
-
-from dataclasses import dataclass
 from random import randrange
 
 from . import definitions
-from .vec import Vec2
-from .drawing import Drawable
 from .update import StatefulObject
-from . import weapon_effects
+from .player import Player
+from .enemy import Enemy
 
-def dimensions():
-    return Vec2(definitions.ACTION_AREA.x / 100, definitions.ACTION_AREA.y / 100)
+class WaveController(StatefulObject):
+    def __init__(self, enemy_list):
+        super(WaveController, self).__init__()
+        self.enemy_list = enemy_list
+
+    def update(self, time):
+        if len(self.enemy_list) == 0:
+            for x in range(randrange(1, 5)):
+                self.enemy_list.append(Enemy(definitions.ACTION_AREA.x + randrange(definitions.ACTION_AREA.x / 16) + 20, randrange(definitions.ACTION_AREA.y), randrange(2,10), 10, time, self.enemy_list))
+
+class Game:
+    def __init__(self):
+        self.enemies = []
+        self.player = Player(self.enemies)
+        self.wave_controller = WaveController(self.enemies)

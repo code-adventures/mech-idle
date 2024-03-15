@@ -59,7 +59,9 @@ class Beam(Drawable, StatefulObject):
         if done:
             super().remove_drawable()
             super().remove_stateful_object()
-            self.target.hit(1)
+            if self.target.hit(1):
+                print ('xp increased')
+                self.source.xp += 1 
         return done
 
 
@@ -92,5 +94,7 @@ class Rocket(Drawable, StatefulObject):
         if done:
             super().remove_drawable()
             super().remove_stateful_object()
-            self.target.hit(1)
+            if self.target.hit(1):
+                print ('xp increased')
+                self.source.xp += 1
         return done

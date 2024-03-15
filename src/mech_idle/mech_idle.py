@@ -25,13 +25,12 @@ import OpenGL.GL as gl
 import imgui
 from imgui.integrations.pygame import PygameRenderer
 
-from . import mech
-from . import hull
 from . import action
 from . import drawing
 from . import update
-from . import setup
 from . import definitions
+from .game import Game
+from . import player_ui
 
 
 def show_mech_information():
@@ -51,16 +50,20 @@ def show_content_area(action_height):
             if tab_bar.opened:
                 with imgui.begin_tab_item("Mech information") as item1:
                     if item1.selected:
-                        show_mech_information()
-                with imgui.begin_tab_item("Skills") as item2:
-                    if item2.selected:
-                        show_skills()
-                with imgui.begin_tab_item("Components") as item3:
-                    if item3.selected:
-                        show_components()
-                with imgui.begin_tab_item("Available hulls") as item4:
-                    if item4.selected:
-                        hull.show_available_hulls()
+                        player_ui.draw(game.player)
+                pass
+#               with imgui.begin_tab_item("Mech information") as item1:
+#                   if item1.selected:
+#                       show_mech_information()
+#               with imgui.begin_tab_item("Skills") as item2:
+#                   if item2.selected:
+#                       show_skills()
+#               with imgui.begin_tab_item("Components") as item3:
+#                   if item3.selected:
+#                       show_components()
+#               with imgui.begin_tab_item("Available hulls") as item4:
+#                   if item4.selected:
+#                       hull.show_available_hulls()
         pass
 
 def show_action_area():
@@ -98,6 +101,8 @@ fonts = imgui.get_io().fonts
 fontfile = os.path.join(font_dir, "SpaceMono-Regular.ttf")
 font = fonts.add_font_from_file_ttf(fontfile, 20)
 impl.refresh_font_texture()
+
+game = Game()
 
 
 while running:
