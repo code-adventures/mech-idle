@@ -57,9 +57,7 @@ class Enemy(Drawable, StatefulObject):
 
     def hit(self, dmg):
         dead = self.health <= 0
-        h = self.health
         self.health -= dmg
         more_dead = self.health <= 0
         died = dead != more_dead
-        print (f'{dead},{h} -> {more_dead},{self.health} -> {died}')
         return died

@@ -19,13 +19,23 @@ import math
 import imgui
 
 def draw(player):
-    imgui.text("XP: " + str(player.xp))
-    
-    for s in player.skills:
-        imgui.progress_bar(min(1, player.xp / s.get_cost()), (200, 0), f'{min(s.get_cost(), player.xp)}/{s.get_cost()}')
-        imgui.same_line()
-        imgui.text(s.name)
-        if imgui.button(f'Level {s.level+1}'):
-            player.xp -= s.get_cost()
-            s.level += 1
+    imgui.text(f"XP: {int(player.xp)}")
+
+    with imgui.begin_table("Skills", 3, imgui.TABLE_SIZING_STRETCH_PROP) as table:
+        imgui.table_setup_column("1", imgui.TABLE_COLUMN_WIDTH_STRETCH)
+        imgui.table_setup_column("2", imgui.TABLE_COLUMN_WIDTH_FIXED)
+        imgui.table_setup_column("3", imgui.TABLE_COLUMN_WIDTH_FIXED)
+        for s in player.skills:
+            imgui.table_next_row()
+            imgui.table_next_column()
+            imgui.progress_bar(min(1, player.xp / s.get_cost()), (-1, 0), f'{int(min(s.get_cost(), player.xp))}/{int(s.get_cost())}')
+            imgui.table_next_column()
+            imgui.text(s.name)
+            imgui.table_next_column()
+            if player.xp < s.get_cost():
+                imgui.text(f'Upgrade to level {s.level+1}')
+            else:
+                if imgui.button(f'Upgrade to level {s.level+1}'):
+                    player.xp -= s.get_cost()
+                    s.level += 1
 
