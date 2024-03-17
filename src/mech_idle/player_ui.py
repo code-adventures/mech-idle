@@ -35,7 +35,9 @@ def draw(player):
             if player.xp < s.get_cost():
                 imgui.text(f'Upgrade to level {s.level+1}')
             else:
+                imgui.push_id(s.name)
                 if imgui.button(f'Upgrade to level {s.level+1}'):
                     player.xp -= s.get_cost()
                     s.level += 1
+                imgui.pop_id()
 
