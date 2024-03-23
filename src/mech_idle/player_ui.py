@@ -19,8 +19,7 @@ import math
 import imgui
 
 def draw(player):
-    imgui.text(f"XP: {int(player.xp)}")
-
+    imgui.text(f"Skills")
     with imgui.begin_table("Skills", 3, imgui.TABLE_SIZING_STRETCH_PROP) as table:
         imgui.table_setup_column("1", imgui.TABLE_COLUMN_WIDTH_STRETCH)
         imgui.table_setup_column("2", imgui.TABLE_COLUMN_WIDTH_FIXED)

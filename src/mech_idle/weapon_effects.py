@@ -46,6 +46,8 @@ class Beam(Drawable, StatefulObject):
         self.target = target
         self.start = time
         self.duration = duration
+        self.tick = duration / 10
+        self.last_tick = self.start
 
     def draw(self, transform, draw_list):
         target_pos = self.target.get_pos()
@@ -56,11 +58,13 @@ class Beam(Drawable, StatefulObject):
 
     def update(self, time):
         done = self.start + self.duration <= time
+        if self.last_tick + self.tick <= time:
+            if self.target.hit(1):
+                self.source.xp += 1
+            self.last_tick += self.tick
         if done:
             super().remove_drawable()
             super().remove_stateful_object()
-            if self.target.hit(1):
-                self.source.xp += 1 
         return done
 
 

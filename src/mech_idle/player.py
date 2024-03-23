@@ -24,6 +24,9 @@ from .vec import Vec2
 from .update import StatefulObject
 from .drawing import Drawable
 from . import weapon_effects
+from . import hull
+from . import setup
+from . import weapons
 
 class Skill:
     def __init__(self, name):
@@ -36,18 +39,14 @@ class Skill:
 class Player(Drawable, StatefulObject):
     def __init__(self, enemy_list):
         super(Player, self).__init__()
-        self.last_shot = 0
         self.xp = 0
         self.skills = [Skill("Rocket launch frequency"), Skill("Beam frequency")]
         self.enemy_list = enemy_list
+        self.setup = setup.Setup()
+        self.setup.setup(hull.hulls[0], { hull.MountPoints.LEFT_ARM: [ [weapons.AutoCannon()],[] ], hull.MountPoints.RIGHT_ARM: [ [weapons.BeamLaser()],[] ] })
 
     def shoot(self, time):
-        if self.last_shot + 500 <= time and len(self.enemy_list) > 0:
-            if randrange(2) < 1:
-                weapon_effects.Rocket(self, self.enemy_list[randrange(len(self.enemy_list))], time, 2000)
-            else:
-                weapon_effects.Beam(self, self.enemy_list[randrange(len(self.enemy_list))], time, 500)
-            self.last_shot = time
+        self.setup.shoot(self, time, self.enemy_list)
 
     def update(self, time):
         self.shoot(time)

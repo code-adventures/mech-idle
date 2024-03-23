@@ -23,16 +23,20 @@ from . import definitions
 from .update import StatefulObject
 from .player import Player
 from .enemy import Enemy
+from .vec import Vec2
 
 class WaveController(StatefulObject):
     def __init__(self, enemy_list):
         super(WaveController, self).__init__()
         self.enemy_list = enemy_list
+        self.wave = 0
 
     def update(self, time):
         if len(self.enemy_list) == 0:
+            self.wave = self.wave + 1
             for x in range(randrange(1, 5)):
-                self.enemy_list.append(Enemy(definitions.ACTION_AREA.x + randrange(definitions.ACTION_AREA.x / 16) + 20, randrange(definitions.ACTION_AREA.y), randrange(2,10), 10, time, self.enemy_list))
+                where = Vec2(definitions.ACTION_AREA.x + randrange(definitions.ACTION_AREA.x / 16) + 20, randrange(definitions.ACTION_AREA.y))
+                Enemy(where, randrange(2,10), 10, time, self.enemy_list)
 
 class Game:
     def __init__(self):

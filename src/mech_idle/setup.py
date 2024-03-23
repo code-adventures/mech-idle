@@ -37,4 +37,7 @@ class Setup:
                 v[0] = v[0][:c[0]]    # drop every module after the available number of mountpoints
                 v[1] = v[1][:c[1]]
 
-
+    def shoot(self, owner, time, enemy_list):
+        for k,v in self.modules.items():
+            for m in v[0]:
+                m.shoot(owner, time, enemy_list)

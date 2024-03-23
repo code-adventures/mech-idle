@@ -16,12 +16,13 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-from dataclasses import dataclass
+import imgui
 
-@dataclass
-class Vec2:
-    x: float
-    y: float
-    
-    def copy(self):
-        return Vec2(self.x, self.y)
+from .game import Game
+
+def draw(game: Game):
+    imgui.text(f"XP: {int(game.player.xp)}")
+    imgui.text(f"Wave: {game.wave_controller.wave}")
+    imgui.text(f"Enemies: {len(game.enemies)}")
+    for e in game.enemies:
+        imgui.text(f" {e.health} => {int(e.dist_to_mech())}")

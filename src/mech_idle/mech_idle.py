@@ -31,6 +31,7 @@ from . import update
 from . import definitions
 from .game import Game
 from . import player_ui
+from . import game_ui
 
 
 def show_mech_information():
@@ -42,9 +43,9 @@ def show_skills():
 def show_components():
     pass
 
-def show_content_area(action_height):
-    imgui.set_next_window_position(0, 0)
-    imgui.set_next_window_size(imgui.get_io().display_size.x, imgui.get_io().display_size.y - action_height)
+def show_content_area(action_height, width):
+    imgui.set_next_window_position(width, 0)
+    imgui.set_next_window_size(imgui.get_io().display_size.x - width, imgui.get_io().display_size.y - action_height)
     with imgui.begin("Content", False, flags=imgui.WINDOW_NO_MOVE | imgui.WINDOW_NO_COLLAPSE | imgui.WINDOW_NO_TITLE_BAR | imgui.WINDOW_NO_RESIZE):
         with imgui.begin_tab_bar("MyTabBar") as tab_bar:
             if tab_bar.opened:
@@ -65,6 +66,14 @@ def show_content_area(action_height):
 #                   if item4.selected:
 #                       hull.show_available_hulls()
         pass
+
+def show_info_area(action_height):
+    width = 250
+    imgui.set_next_window_position(0, 0)
+    imgui.set_next_window_size(width, imgui.get_io().display_size.y - action_height)
+    with imgui.begin("Game Info", False, flags=imgui.WINDOW_NO_MOVE | imgui.WINDOW_NO_COLLAPSE | imgui.WINDOW_NO_TITLE_BAR | imgui.WINDOW_NO_RESIZE):
+        game_ui.draw(game)
+    return width
 
 def show_action_area():
     dim = action.dimensions()
@@ -124,7 +133,8 @@ while running:
 
     with imgui.font(font):
         height = show_action_area()
-        show_content_area(height)
+        width = show_info_area(height)
+        show_content_area(height, width)
 
     gl.glClearColor(1, 1, 1, 1)
     gl.glClear(gl.GL_COLOR_BUFFER_BIT)

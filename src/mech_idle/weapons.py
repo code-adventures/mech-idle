@@ -15,8 +15,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+from random import randrange
 from dataclasses import dataclass
-from .weapon_effects import WeaponEffects
+from .weapon_effects import WeaponEffects, create_effect
 
 @dataclass
 class Weapon:
@@ -26,8 +27,23 @@ class Weapon:
     armor_damage: float
     frequency: float
     range: int
-    effect: object
-    
+    effect: WeaponEffects
+    last_shot = 0
+
+    def shoot(self, owner, time, enemy_list):
+        prepared_list = None
+        if self.last_shot + 1000/self.frequency <= time and len(enemy_list) > 0:
+            if prepared_list == None:
+                prepared_list = [(e, e.dist_to_mech()) for e in enemy_list]
+            enemy = self.find_enemy(prepared_list)
+            if enemy is not None:
+                create_effect(self.effect, owner, enemy, time, 2500)
+                self.last_shot = time
+
+    def find_enemy(self, prepared_list):
+        possible_enemies = [e[0] for e in prepared_list if e[1] < self.range]
+        return possible_enemies[0] if len(possible_enemies) > 0 else None
+
 class AutoCannon(Weapon):
     def __init__(self):
         super(AutoCannon, self).__init__("AutoCannon", 1, 0.2, 0.8, 1.0, 400, WeaponEffects.ROCKET)

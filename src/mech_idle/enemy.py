@@ -24,17 +24,18 @@ from .drawing import Drawable
 from .update import StatefulObject
 
 class Enemy(Drawable, StatefulObject):
-    def __init__(self, x, y, speed, health, created, enemy_list):
+    def __init__(self, pos: Vec2, speed, health, created, enemy_list):
         super(Enemy, self).__init__()
-        self.start = Vec2(x, y)
-        self.pos = Vec2(x, y)
+        self.start = pos.copy()
+        self.pos = pos.copy()
         self.health = health
         self.created = created
-        alpha = math.atan((y - definitions.MECH.y) / (x - definitions.MECH.x))
-        dist = ((x - definitions.MECH.x) / math.cos(alpha)) - 250
-        self.delta_x = dist * math.cos(alpha) / (dist / speed)
-        self.delta_y = dist * math.sin(alpha) / (dist / speed)
+        self.alpha = math.atan((pos.y - definitions.MECH.y) / (pos.x - definitions.MECH.x))
+        dist = self.dist_to_mech() - 250
+        self.delta_x = dist * math.cos(self.alpha) / (dist / speed)
+        self.delta_y = dist * math.sin(self.alpha) / (dist / speed)
         self.enemy_list = enemy_list
+        self.enemy_list.append(self)
 
     def update(self, time):
         if self.health <= 0:
@@ -54,6 +55,9 @@ class Enemy(Drawable, StatefulObject):
     def draw(self, transform, draw_list):
         draw_list.add_circle(transform.x(self.pos.x), transform.y(self.pos.y), transform.scale(definitions.ENEMY_RADIUS),
                              imgui.get_color_u32_rgba(1,0,0,1), thickness=transform.scale(2))
+
+    def dist_to_mech(self):
+        return ((self.pos.x - definitions.MECH.x) / math.cos(self.alpha))
 
     def hit(self, dmg):
         dead = self.health <= 0
