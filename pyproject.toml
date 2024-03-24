@@ -49,11 +49,20 @@ cov-report = [
   "- coverage combine",
   "coverage report -m --omit=tests/*,__init__.py",
 ]
+cov-export-xml = [
+  "- coverage combine",
+  "coverage xml",
+]
 cov = [
   "test-cov",
   "cov-report",
 ]
+cov_xml = [
+  "test-cov",
+  "cov-export-xml",
+]
 game = "python -m src.mech_idle.mech_idle"
+
 
 [[tool.hatch.envs.all.matrix]]
 python = ["3.8", "3.9", "3.10", "3.11", "3.12"]
