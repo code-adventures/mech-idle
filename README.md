@@ -1,6 +1,5 @@
 # Mech Idle
 
------
 [![Coverage Status](https://coveralls.io/repos/github/code-adventures/mech-idle/badge.svg?branch=github_action_test_coverage)](https://coveralls.io/github/code-adventures/mech-idle?branch=github_action_test_coverage)
 
 **Table of Contents**
