@@ -1,6 +1,6 @@
 
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+name: test coverage
+run-name: test coverage on branch ${{ github.head_ref }}
 on: [push]
 jobs:
   test:
