@@ -41,7 +41,6 @@ path = "src/mech_idle/__about__.py"
 dependencies = [
   "coverage[toml]>=6.5",
   "pytest",
-  "coveralls-python",
 ]
 [tool.hatch.envs.default.scripts]
 test = "pytest {args:tests}"
