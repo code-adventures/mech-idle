@@ -18,7 +18,7 @@
 
 import unittest
 from src.mech_idle import vec as vec
-from src.mech_idle import drawing as drawing
+from src.mech_idle.ui import drawing as drawing
 
 class ATestDrawable(drawing.Drawable):
     def __init__(self):

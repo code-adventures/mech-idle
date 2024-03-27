@@ -46,7 +46,7 @@ class Weapon:
 
 class AutoCannon(Weapon):
     def __init__(self):
-        super(AutoCannon, self).__init__("AutoCannon", 1, 0.2, 0.8, 1.0, 400, WeaponEffects.ROCKET)
+        super(AutoCannon, self).__init__("AutoCannon", 1, 0.2, 0.8, 8.0, 1400, WeaponEffects.BULLET)
 
 class BeamLaser(Weapon):
     def __init__(self):

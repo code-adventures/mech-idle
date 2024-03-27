@@ -26,12 +26,12 @@ import imgui
 from imgui.integrations.pygame import PygameRenderer
 
 from . import action
-from . import drawing
+from .ui import drawing
 from . import update
 from . import definitions
 from .game import Game
-from . import player_ui
-from . import game_ui
+from .ui import player_ui
+from .ui import game_ui
 
 
 def show_mech_information():

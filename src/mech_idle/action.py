@@ -24,7 +24,7 @@ from random import randrange
 
 from . import definitions
 from .vec import Vec2
-from .drawing import Drawable
+from .ui.drawing import Drawable
 from .update import StatefulObject
 from . import weapon_effects
 

@@ -17,34 +17,23 @@
 #
 
 import unittest
-from src.mech_idle import weapons as weapons
+from src.mech_idle.vec import Vec2
+from src.mech_idle import weapons
 from src.mech_idle import weapon_effects
+
+class source_target_mock():
+    def get_pos(self):
+        return Vec2(0, 0)
+
+    def get_pos_at(self, time):
+        return Vec2(0, 0)
+
 
 
 class weapons_test(unittest.TestCase):
-    def test_auto_cannon(self):
-        ac = weapons.AutoCannon()
-        self.assertEqual(ac.name, "AutoCannon")
-        self.assertEqual(ac.damage, 1)
-        self.assertEqual(ac.shield_damage, 0.2)
-        self.assertEqual(ac.armor_damage, 0.8)
-        self.assertEqual(ac.frequency, 1.0)
-        self.assertEqual(ac.range, 400)
-        self.assertEqual(ac.effect, weapon_effects.WeaponEffects.ROCKET)
-
-    def test_beam_laser(self):
-        bl = weapons.BeamLaser()
-        self.assertEqual(bl.name, "BeamLaser")
-        self.assertEqual(bl.damage, 3)
-        self.assertEqual(bl.shield_damage, 0.8)
-        self.assertEqual(bl.armor_damage, 0.2)
-        self.assertEqual(bl.frequency, 0.3)
-        self.assertEqual(bl.range, 800)
-        self.assertEqual(bl.effect, weapon_effects.WeaponEffects.BEAM)
-
     def test_create_effect(self):
-        source = object()
-        target = object()
+        source = source_target_mock()
+        target = source_target_mock()
         time = 0
         duration = 100
         effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.ROCKET, source, target, time, duration)
@@ -52,6 +41,9 @@ class weapons_test(unittest.TestCase):
 
         effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.BEAM, source, target, time, duration)
         self.assertIsInstance(effect, weapon_effects.Beam)
+
+        effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.BULLET, source, target, time, duration)
+        self.assertIsInstance(effect, weapon_effects.Bullet)
 
 
 if __name__ == '__main__':

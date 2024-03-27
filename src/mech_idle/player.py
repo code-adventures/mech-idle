@@ -22,7 +22,7 @@ import imgui
 from . import definitions
 from .vec import Vec2
 from .update import StatefulObject
-from .drawing import Drawable
+from .ui.drawing import Drawable
 from . import weapon_effects
 from . import hull
 from . import setup

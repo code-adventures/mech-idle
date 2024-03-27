@@ -17,12 +17,37 @@
 #
 
 import imgui
+from .. import definitions
 
-from .game import Game
+drawables = []
 
-def draw(game: Game):
-    imgui.text(f"XP: {int(game.player.xp)}")
-    imgui.text(f"Wave: {game.wave_controller.wave}")
-    imgui.text(f"Enemies: {len(game.enemies)}")
-    for e in game.enemies:
-        imgui.text(f" {e.health} => {int(e.dist_to_mech())}")
+class Drawable:
+    def __init__(self):
+        super(Drawable, self).__init__()
+        drawables.append(self)
+
+    def draw(self, transform, draw_list):
+        pass
+
+    def remove_drawable(self):
+        if self in drawables: drawables.remove(self)
+
+class Transform:
+    def __init__(self, pos, ratio):
+        self.pos = pos
+        self.ratio = ratio
+
+    def x(self, _x):
+        return self.pos.x + _x*self.ratio
+
+    def y(self, _y):
+        return self.pos.y + _y*self.ratio
+
+    def scale(self, v):
+        return v*self.ratio;
+
+def draw(transform, draw_list):
+
+    for d in drawables:
+        d.draw(transform, draw_list)
+

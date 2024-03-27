@@ -20,7 +20,7 @@ import imgui
 
 from . import definitions
 from .vec import Vec2
-from .drawing import Drawable
+from .ui.drawing import Drawable
 from .update import StatefulObject
 
 class Enemy(Drawable, StatefulObject):
@@ -51,6 +51,10 @@ class Enemy(Drawable, StatefulObject):
 
     def get_pos(self):
         return self.pos
+
+    def get_pos_at(self, time):
+        steps = (time - self.created) / 100
+        return Vec2(self.start.x - self.delta_x * steps, self.start.y - self.delta_y * steps)   
 
     def draw(self, transform, draw_list):
         draw_list.add_circle(transform.x(self.pos.x), transform.y(self.pos.y), transform.scale(definitions.ENEMY_RADIUS),
