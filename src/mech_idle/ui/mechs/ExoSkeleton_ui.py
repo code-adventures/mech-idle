@@ -1,3 +1,5 @@
+
+
 #
 #    Mech Idle - an idle mech game
 #    Copyright (C) 2024 Code Adventures
@@ -16,12 +18,21 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
+# Exo-Skeleton
+#   Skill:
+#       - Basic Mech control
+#   Bonus:
+#       - Chance to be hit 10% reduced per level MC
+#       - Speed increased by 10% per level MC
+#
+#   Configuration:
+#       - 1x weapon slot per arm
+
 import imgui
 
-from ..game import Game
 
-def draw(game: Game):
-    imgui.text(f"Wave: {game.wave_controller.wave}")
-    imgui.text(f"Enemies: {len(game.enemies)}")
-    for e in game.enemies:
-        imgui.text(f" {e.health} => {int(e.dist_to_mech())}")
+def draw(hull):
+    imgui.text("Exo-Skeleton")
+    imgui.text("Chance to be hit reduced by 10% per level of Mech Control")
+    imgui.text("Speed increased by 10% per level of Mech Control")
+

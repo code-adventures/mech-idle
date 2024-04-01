@@ -36,7 +36,7 @@ class Hull:
     id: int
     name: str
     speed: int
-    mountpoints: dict[MountPoints, tuple[int, int]]
+    mountpoints: dict[MountPoints, tuple[int, int]] = None
 
     @staticmethod
     def create_mountpoints(**mountpoints):
@@ -48,6 +48,12 @@ class Hull:
                  MountPoints.RIGHT_SHOULDER: mountpoints.get('right_shoulder', (0,0)),
                  MountPoints.LEFT_LEG: mountpoints.get('left_leg', (0,0)),
                  MountPoints.RIGHT_LEG: mountpoints.get('right_leg', (0,0)) }
+
+    def speed(self, skills):
+        return self.speed
+
+    def chance_to_hit(self, skills):
+        return 1
 
 
 hulls : list[Hull] =  [Hull(0, "Toshido Hellcat", 5, Hull.create_mountpoints(head=(2,1), left_arm=(1,0), right_arm=(1,0))),

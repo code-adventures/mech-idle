@@ -26,24 +26,32 @@ from . import definitions
 from .vec import Vec2
 from .ui.drawing import Drawable
 from .update import StatefulObject
+from .hull import MountPoints
 
 class WeaponEffects(IntEnum):
     BEAM = 0
     ROCKET = 1
     BULLET = 2
 
-def create_effect(effect, source, target, time, duration):
+def create_effect(effect, source, mount_point, target, time, duration):
     if effect == WeaponEffects.BEAM:
-        return Beam(source, target, time, duration)
+        return Beam(source, get_slot_location(mount_point), target, time, duration)
     elif effect == WeaponEffects.ROCKET:
-        return Rocket(source, target, time, duration)
+        return Rocket(source, get_slot_location(mount_point), target, time, duration)
     elif effect == WeaponEffects.BULLET:
-        return Bullet(source, target, time, duration)
+        return Bullet(source, get_slot_location(mount_point), target, time, duration)
     else:
         return None
 
+def get_slot_location(mount_point):
+    if mount_point in [MountPoints.LEFT_ARM, MountPoints.LEFT_SHOULDER, MountPoints.LEFT_LEG]:
+        return -1
+    elif mount_point in [MountPoints.RIGHT_ARM, MountPoints.RIGHT_SHOULDER, MountPoints.RIGHT_LEG]:
+        return 1
+    return 0
+
 class Beam(Drawable, StatefulObject):
-    def __init__(self, source, target, time, duration):
+    def __init__(self, source, slot_location, target, time, duration):
         super(Beam, self).__init__()
         self.source = source
         self.target = target
@@ -51,10 +59,11 @@ class Beam(Drawable, StatefulObject):
         self.duration = duration
         self.tick = duration / 10
         self.last_tick = self.start
+        self.slot_location = slot_location
 
     def draw(self, transform, draw_list):
         target_pos = self.target.get_pos()
-        MY = self.source.get_pos().y + (definitions.MECH_RADIUS * (-1 if target_pos.y < self.source.get_pos().y else 1))
+        MY = self.source.get_pos().y + (definitions.MECH_RADIUS * self.slot_location)
         draw_list.add_line(transform.x(self.source.get_pos().x), transform.y(MY),
                            transform.x(target_pos.x), transform.y(target_pos.y),
                            imgui.get_color_u32_rgba(0,0,1,1), 2)
@@ -71,7 +80,7 @@ class Beam(Drawable, StatefulObject):
         return done
 
 class Bullet(Drawable, StatefulObject):
-    def __init__(self, source, target, time, duration):
+    def __init__(self, source, slot_location, target, time, duration):
         super(Bullet, self).__init__()
         self.source = source
         self.target = target
@@ -80,7 +89,7 @@ class Bullet(Drawable, StatefulObject):
         self.now = self.start
         target_at = target.get_pos_at(time + duration)
         self.start_pos = source.get_pos().copy()
-        self.start_pos.y += definitions.MECH_RADIUS * (-1 if target.get_pos().y < self.source.get_pos().y else 1) + randrange(-10, 10)
+        self.start_pos.y += definitions.MECH_RADIUS * slot_location + randrange(-10, 10)
         self.dx = target_at.x - self.start_pos.x
         self.dy = target_at.y - self.start_pos.y
 
@@ -111,18 +120,19 @@ def bezier(p1, p2, p3, ratio):
     return Vec2(p11.x + (p21.x - p11.x)*ratio, p11.y + (p21.y -p11.y)* ratio)
 
 class Rocket(Drawable, StatefulObject):
-    def __init__(self, source, target, time, duration):
+    def __init__(self, source, slot_location, target, time, duration):
         super(Rocket, self).__init__()
         self.source = source
         self.target = target
         self.start = time
         self.duration = duration
         self.now = self.start
+        self.slot_location = slot_location
 
     def draw(self, transform, draw_list):
         target_pos = self.target.get_pos()
 
-        MY = self.source.get_pos().y + (definitions.MECH_RADIUS * (-1 if target_pos.y < self.source.get_pos().y else 1))
+        MY = self.source.get_pos().y + (definitions.MECH_RADIUS * self.slot_location)
         Y = 0 if target_pos.y < self.source.get_pos().y else definitions.ACTION_AREA.y
         pos = bezier(Vec2(self.source.get_pos().x, MY), Vec2(self.source.get_pos().x, Y), target_pos, (self.now - self.start)/self.duration)
         draw_list.add_circle(transform.x(pos.x), transform.y(pos.y), transform.scale(1), imgui.get_color_u32_rgba(0,1,0,1), thickness=transform.scale(1))

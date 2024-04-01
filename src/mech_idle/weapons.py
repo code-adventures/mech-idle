@@ -30,14 +30,12 @@ class Weapon:
     effect: WeaponEffects
     last_shot = 0
 
-    def shoot(self, owner, time, enemy_list):
-        prepared_list = None
+    def shoot(self, owner, mount_point, time, enemy_list):
         if self.last_shot + 1000/self.frequency <= time and len(enemy_list) > 0:
-            if prepared_list == None:
-                prepared_list = [(e, e.dist_to_mech()) for e in enemy_list]
+            prepared_list = [(e, e.dist_to_mech()) for e in enemy_list]
             enemy = self.find_enemy(prepared_list)
             if enemy is not None:
-                create_effect(self.effect, owner, enemy, time, 2500)
+                create_effect(self.effect, owner, mount_point, enemy, time, 2500)
                 self.last_shot = time
 
     def find_enemy(self, prepared_list):

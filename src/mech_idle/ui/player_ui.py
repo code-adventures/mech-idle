@@ -19,24 +19,25 @@ import math
 import imgui
 
 def draw(player):
+    imgui.text(f"XP: {player.xp}")
     imgui.text(f"Skills")
     with imgui.begin_table("Skills", 3, imgui.TABLE_SIZING_STRETCH_PROP) as table:
         imgui.table_setup_column("1", imgui.TABLE_COLUMN_WIDTH_STRETCH)
         imgui.table_setup_column("2", imgui.TABLE_COLUMN_WIDTH_FIXED)
         imgui.table_setup_column("3", imgui.TABLE_COLUMN_WIDTH_FIXED)
-        for s in player.skills:
+        for n,s in player.skills.skills.items():
             imgui.table_next_row()
             imgui.table_next_column()
-            imgui.progress_bar(min(1, player.xp / s.get_cost()), (-1, 0), f'{int(min(s.get_cost(), player.xp))}/{int(s.get_cost())}')
+            imgui.progress_bar(min(1, player.xp / s.cost()), (-1, 0), f'{int(min(s.cost(), player.xp))}/{int(s.cost())}')
             imgui.table_next_column()
-            imgui.text(s.name)
+            imgui.text(s.label)
             imgui.table_next_column()
-            if player.xp < s.get_cost():
+            if player.xp < s.cost():
                 imgui.text(f'Upgrade to level {s.level+1}')
             else:
                 imgui.push_id(s.name)
                 if imgui.button(f'Upgrade to level {s.level+1}'):
-                    player.xp -= s.get_cost()
+                    player.xp -= s.cost()
                     s.level += 1
                 imgui.pop_id()
 

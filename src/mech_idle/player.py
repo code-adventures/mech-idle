@@ -27,23 +27,17 @@ from . import weapon_effects
 from . import hull
 from . import setup
 from . import weapons
-
-class Skill:
-    def __init__(self, name):
-        self.name = name
-        self.level = 0
-
-    def get_cost(self):
-        return math.pow(2,self.level)
+from . import skills
+from .mechs import ExoSkeleton
 
 class Player(Drawable, StatefulObject):
     def __init__(self, enemy_list):
         super(Player, self).__init__()
         self.xp = 0
-        self.skills = [Skill("Rocket launch frequency"), Skill("Beam frequency")]
+        self.skills = skills.Skills()
         self.enemy_list = enemy_list
         self.setup = setup.Setup()
-        self.setup.setup(hull.hulls[0], { hull.MountPoints.LEFT_ARM: [ [weapons.AutoCannon()],[] ], hull.MountPoints.RIGHT_ARM: [ [weapons.BeamLaser()],[] ] })
+        self.setup.setup(ExoSkeleton.ExoSkeleton(), { hull.MountPoints.LEFT_ARM: [ [weapons.AutoCannon()],[] ], hull.MountPoints.RIGHT_ARM: [ [weapons.AutoCannon()],[] ] })
 
     def shoot(self, time):
         self.setup.shoot(self, time, self.enemy_list)

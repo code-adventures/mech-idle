@@ -15,13 +15,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-
 import imgui
 
-from ..game import Game
+msgs = []
 
-def draw(game: Game):
-    imgui.text(f"Wave: {game.wave_controller.wave}")
-    imgui.text(f"Enemies: {len(game.enemies)}")
-    for e in game.enemies:
-        imgui.text(f" {e.health} => {int(e.dist_to_mech())}")
+def add_msg(msg):
+    global msgs
+    msgs = (msgs + [msg])[-10:]
+
+def print_msgs():
+    for msg in msgs:
+        imgui.text(msg)

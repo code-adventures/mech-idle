@@ -32,6 +32,8 @@ from . import definitions
 from .game import Game
 from .ui import player_ui
 from .ui import game_ui
+from .ui import setup_ui
+from . import debug
 
 
 def show_mech_information():
@@ -49,13 +51,12 @@ def show_content_area(action_height, width):
     with imgui.begin("Content", False, flags=imgui.WINDOW_NO_MOVE | imgui.WINDOW_NO_COLLAPSE | imgui.WINDOW_NO_TITLE_BAR | imgui.WINDOW_NO_RESIZE):
         with imgui.begin_tab_bar("MyTabBar") as tab_bar:
             if tab_bar.opened:
-                with imgui.begin_tab_item("Mech information") as item1:
+                with imgui.begin_tab_item("Player") as item1:
                     if item1.selected:
                         player_ui.draw(game.player)
-                pass
-#               with imgui.begin_tab_item("Mech information") as item1:
-#                   if item1.selected:
-#                       show_mech_information()
+                with imgui.begin_tab_item("Mech information") as item1:
+                    if item1.selected:
+                        setup_ui.draw(game.player.setup)
 #               with imgui.begin_tab_item("Skills") as item2:
 #                   if item2.selected:
 #                       show_skills()
@@ -66,6 +67,14 @@ def show_content_area(action_height, width):
 #                   if item4.selected:
 #                       hull.show_available_hulls()
         pass
+
+#debugging window
+    ch = imgui.get_io().display_size.y - action_height
+    debug_win_height = 300
+    imgui.set_next_window_position(width, ch - debug_win_height)
+    imgui.set_next_window_size(imgui.get_io().display_size.x - width, debug_win_height)
+    with imgui.begin("Debug", False, flags=imgui.WINDOW_NO_MOVE | imgui.WINDOW_NO_COLLAPSE | imgui.WINDOW_NO_TITLE_BAR | imgui.WINDOW_NO_RESIZE):
+        debug.print_msgs()
 
 def show_info_area(action_height):
     width = 250

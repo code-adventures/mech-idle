@@ -17,6 +17,7 @@
 #
 
 from . import hull
+from . import debug
 
 class Setup:
     def __init__(self):
@@ -40,4 +41,4 @@ class Setup:
     def shoot(self, owner, time, enemy_list):
         for k,v in self.modules.items():
             for m in v[0]:
-                m.shoot(owner, time, enemy_list)
+                m.shoot(owner, k, time, enemy_list)
