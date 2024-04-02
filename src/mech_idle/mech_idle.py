@@ -16,24 +16,21 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import sys
-from pathlib import Path
-import os
-
 import pygame
 import OpenGL.GL as gl
 import imgui
 from imgui.integrations.pygame import PygameRenderer
 
-from . import action
-from .ui import drawing
-from . import update
 from . import definitions
+from . import update
+from . import debug
 from .game import Game
+from .ui import definitions as ui_definitions
+from .ui import drawing
 from .ui import player_ui
 from .ui import game_ui
 from .ui import setup_ui
-from . import debug
+from .ui import fonts
 
 
 def show_mech_information():
@@ -85,7 +82,7 @@ def show_info_area(action_height):
     return width
 
 def show_action_area():
-    dim = action.dimensions()
+    dim = ui_definitions.action_window_dimensions()
     height = imgui.get_io().display_size.x / (dim.x/dim.y)
     imgui.set_next_window_position(0, imgui.get_io().display_size.y - height)
     imgui.set_next_window_size(imgui.get_io().display_size.x, height)
@@ -113,15 +110,9 @@ impl = PygameRenderer()
 clock = pygame.time.Clock()
 running = True
 
-# fonts
-font_dir = Path(__file__).parent.parent.parent / "res"
-fonts = imgui.get_io().fonts
-fontfile = os.path.join(font_dir, "SpaceMono-Regular.ttf")
-font = fonts.add_font_from_file_ttf(fontfile, 20)
-impl.refresh_font_texture()
+fonts.load_fonts(impl)
 
 game = Game()
-
 
 while running:
     # poll for events
@@ -140,7 +131,7 @@ while running:
 
     imgui.new_frame()
 
-    with imgui.font(font):
+    with imgui.font(fonts.normal):
         height = show_action_area()
         width = show_info_area(height)
         show_content_area(height, width)

@@ -1,3 +1,4 @@
+
 #
 #    Mech Idle - an idle mech game
 #    Copyright (C) 2024 Code Adventures
@@ -17,16 +18,28 @@
 #
 
 import imgui
-import math
+from src.mech_idle import debug
 
-from dataclasses import dataclass
-from random import randrange
+def test_add_msg():
+    debug.add_msg("test")
+    assert debug.msgs == ["test"]
+    debug.add_msg("test2")
+    assert  debug.msgs == ["test", "test2"]
+        
+    for i in range(11):
+         debug.add_msg(f"test{i}")
+    assert debug.msgs == ["test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8", "test9", "test10"]
 
-from . import definitions
-from .vec import Vec2
-from .ui.drawing import Drawable
-from .update import StatefulObject
-from . import weapon_effects
+def test_clear_msgs():
+    debug.add_msg("test")
+    debug.add_msg("test2")
+    debug.clear_msgs()
+    assert debug.msgs == []
 
-def dimensions():
-    return Vec2(definitions.ACTION_AREA.x / 100, definitions.ACTION_AREA.y / 100)
+def test_print_msgs(mocker):
+    debug.clear_msgs()
+    debug.add_msg("test")
+    debug.add_msg("test2")
+    mocker.patch('imgui.text')
+    debug.print_msgs()
+    imgui.text.assert_has_calls([mocker.call("test"), mocker.call("test2")])

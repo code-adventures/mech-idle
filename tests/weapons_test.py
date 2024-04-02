@@ -20,13 +20,20 @@ import unittest
 from src.mech_idle.vec import Vec2
 from src.mech_idle import weapons
 from src.mech_idle import weapon_effects
+from src.mech_idle.hull import MountPoints
 
 class source_target_mock():
+    def __init__(self):
+        self.speed = 10
+
     def get_pos(self):
         return Vec2(0, 0)
 
     def get_pos_at(self, time):
         return Vec2(0, 0)
+
+    def dist_to_mech(self):
+        return 10
 
 
 
@@ -36,13 +43,13 @@ class weapons_test(unittest.TestCase):
         target = source_target_mock()
         time = 0
         duration = 100
-        effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.ROCKET, source, target, time, duration)
+        effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.ROCKET, source, MountPoints.LEFT_ARM, target, time, duration)
         self.assertIsInstance(effect, weapon_effects.Rocket)
 
-        effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.BEAM, source, target, time, duration)
+        effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.BEAM, source, MountPoints.LEFT_ARM, target, time, duration)
         self.assertIsInstance(effect, weapon_effects.Beam)
 
-        effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.BULLET, source, target, time, duration)
+        effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.BULLET, source, MountPoints.LEFT_ARM, target, time, duration)
         self.assertIsInstance(effect, weapon_effects.Bullet)
 
 

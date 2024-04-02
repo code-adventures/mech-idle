@@ -15,6 +15,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+
 from random import randrange
 from dataclasses import dataclass
 from .weapon_effects import WeaponEffects, create_effect
@@ -48,5 +49,5 @@ class AutoCannon(Weapon):
 
 class BeamLaser(Weapon):
     def __init__(self):
-        super(BeamLaser, self).__init__("BeamLaser", 3, 0.8, 0.2, 0.3, 800, WeaponEffects.BEAM)
+        super(BeamLaser, self).__init__("BeamLaser", 3, 0.8, 0.2, 0.3, 1400, WeaponEffects.BEAM)
     

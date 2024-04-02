@@ -21,6 +21,7 @@ import imgui
 from ..hull import MountPoints
 from ..mechs import ExoSkeleton
 from ..ui.mechs import ExoSkeleton_ui
+from . import weapons_ui
 
 selected = None
 
@@ -30,7 +31,7 @@ def text(text, disabled):
     else:
         imgui.text(text)
 
-def add_modules(mountpoints, location, label):
+def add_modules(mountpoints, modules, location, label):
     text(f"{label}", mountpoints[location][0] + mountpoints[location][1] == 0) 
 
     if mountpoints[location][0] + mountpoints[location][1] == 0:
@@ -39,11 +40,11 @@ def add_modules(mountpoints, location, label):
     global selected
 
     for i in range(mountpoints[location][0]):
-        opened, sel = imgui.selectable(f"  Weapon {i}##{location}", selected == (location, 0, i))
+        opened, sel = imgui.selectable(f"  ({i}) {modules[location][0][i].name}##{location}", selected == (location, 0, i))
         if opened:
             selected = (location, 0, i)
     for i in range(mountpoints[location][1]):
-        opened, sel = imgui.selectable(f"  Aux {i}##{location}", selected == (location, 1, i))
+        opened, sel = imgui.selectable(f"  ({i}) {modules[location][1][i].name}##{location}", selected == (location, 1, i))
         if opened:
             selected = (location, 1, i)
 
@@ -55,16 +56,16 @@ def draw(setup):
 
     with imgui.begin_list_box("##modules", 200, 500) as modules:
         if modules.opened:
-            add_modules(setup.hull.mountpoints, MountPoints.HEAD, "Head:")
-            add_modules(setup.hull.mountpoints, MountPoints.TORSO, "Torso:")
-            add_modules(setup.hull.mountpoints, MountPoints.LEFT_ARM, "Left arm:")
-            add_modules(setup.hull.mountpoints, MountPoints.RIGHT_ARM, "Right arm:")
-            add_modules(setup.hull.mountpoints, MountPoints.LEFT_SHOULDER, "Left shoulder:")
-            add_modules(setup.hull.mountpoints, MountPoints.RIGHT_SHOULDER, "Right shoulder:")
-            add_modules(setup.hull.mountpoints, MountPoints.LEFT_LEG, "Left leg:")
-            add_modules(setup.hull.mountpoints, MountPoints.RIGHT_LEG, "Right leg:")
+            add_modules(setup.hull.mountpoints, setup.modules, MountPoints.HEAD, "Head:")
+            add_modules(setup.hull.mountpoints, setup.modules, MountPoints.TORSO, "Torso:")
+            add_modules(setup.hull.mountpoints, setup.modules, MountPoints.LEFT_ARM, "Left arm:")
+            add_modules(setup.hull.mountpoints, setup.modules, MountPoints.RIGHT_ARM, "Right arm:")
+            add_modules(setup.hull.mountpoints, setup.modules, MountPoints.LEFT_SHOULDER, "Left shoulder:")
+            add_modules(setup.hull.mountpoints, setup.modules, MountPoints.RIGHT_SHOULDER, "Right shoulder:")
+            add_modules(setup.hull.mountpoints, setup.modules, MountPoints.LEFT_LEG, "Left leg:")
+            add_modules(setup.hull.mountpoints, setup.modules, MountPoints.RIGHT_LEG, "Right leg:")
     imgui.same_line()
     with imgui.begin_group():
         if selected is not None:
             module = setup.modules[selected[0]][selected[1]][selected[2]]
-            imgui.text(f"{module.name}")            
+            weapons_ui.draw(module)

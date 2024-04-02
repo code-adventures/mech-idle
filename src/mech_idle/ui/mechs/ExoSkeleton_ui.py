@@ -29,10 +29,11 @@
 #       - 1x weapon slot per arm
 
 import imgui
+from .. import fonts
 
 
 def draw(hull):
-    imgui.text("Exo-Skeleton")
+    fonts.header_text("Exo-Skeleton")
     imgui.text("Chance to be hit reduced by 10% per level of Mech Control")
     imgui.text("Speed increased by 10% per level of Mech Control")
 

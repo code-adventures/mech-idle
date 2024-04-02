@@ -17,8 +17,12 @@
 #
 
 import imgui
-from . import hull
+from . import fonts
 
-class Player:
-    def __init__(self):
-        self.hull = hull.hulls[0]
+def draw(weapon):
+    fonts.header_text(f"{weapon.name}")
+    imgui.text(f"Damage: {weapon.damage}")
+    imgui.text(f"Shield damage: {weapon.shield_damage}")
+    imgui.text(f"Armor damage: {weapon.armor_damage}")
+    imgui.text(f"Frequency: {weapon.frequency}")
+    imgui.text(f"Range: {weapon.range}")

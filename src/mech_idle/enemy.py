@@ -29,9 +29,11 @@ class Enemy(Drawable, StatefulObject):
         self.start = pos.copy()
         self.pos = pos.copy()
         self.health = health
+        self.speed = speed
         self.created = created
         self.alpha = math.atan((pos.y - definitions.MECH.y) / (pos.x - definitions.MECH.x))
         dist = self.dist_to_mech() - 250
+        self.max_steps = dist / speed
         self.delta_x = dist * math.cos(self.alpha) / (dist / speed)
         self.delta_y = dist * math.sin(self.alpha) / (dist / speed)
         self.enemy_list = enemy_list
@@ -53,12 +55,16 @@ class Enemy(Drawable, StatefulObject):
         return self.pos
 
     def get_pos_at(self, time):
-        steps = (time - self.created) / 100
+        steps = min(self.max_steps, (time - self.created) / 100)
         return Vec2(self.start.x - self.delta_x * steps, self.start.y - self.delta_y * steps)   
 
     def draw(self, transform, draw_list):
         draw_list.add_circle(transform.x(self.pos.x), transform.y(self.pos.y), transform.scale(definitions.ENEMY_RADIUS),
                              imgui.get_color_u32_rgba(1,0,0,1), thickness=transform.scale(2))
+
+    def dist_to_mech_at(self, time):
+        pos = self.get_pos_at(time)
+        return ((pos.x - definitions.MECH.x) / math.cos(self.alpha))
 
     def dist_to_mech(self):
         return ((self.pos.x - definitions.MECH.x) / math.cos(self.alpha))

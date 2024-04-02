@@ -37,7 +37,7 @@ class Player(Drawable, StatefulObject):
         self.skills = skills.Skills()
         self.enemy_list = enemy_list
         self.setup = setup.Setup()
-        self.setup.setup(ExoSkeleton.ExoSkeleton(), { hull.MountPoints.LEFT_ARM: [ [weapons.AutoCannon()],[] ], hull.MountPoints.RIGHT_ARM: [ [weapons.AutoCannon()],[] ] })
+        self.setup.setup(ExoSkeleton.ExoSkeleton(), { hull.MountPoints.LEFT_ARM: [ [weapons.AutoCannon()],[] ], hull.MountPoints.RIGHT_ARM: [ [weapons.BeamLaser()],[] ] })
 
     def shoot(self, time):
         self.setup.shoot(self, time, self.enemy_list)

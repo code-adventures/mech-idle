@@ -15,18 +15,25 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
+
 import imgui
+from pathlib import Path
+import os
 
-msgs = []
+normal = None
+header = None
 
-def add_msg(msg):
-    global msgs
-    msgs = (msgs + [msg])[-10:]
+def header_text(text):
+    with imgui.font(header):
+        imgui.text(text)
+        imgui.separator()
 
-def clear_msgs():
-    global msgs
-    msgs = []
+def load_fonts(impl):
+    global normal
+    global header
 
-def print_msgs():
-    for msg in msgs:
-        imgui.text(msg)
+    font_dir = Path(__file__).parent.parent.parent.parent / "res"
+    fontfile = os.path.join(font_dir, "SpaceMono-Regular.ttf")
+    normal = imgui.get_io().fonts.add_font_from_file_ttf(fontfile, 20)
+    header = imgui.get_io().fonts.add_font_from_file_ttf(fontfile, 30)
+    impl.refresh_font_texture()

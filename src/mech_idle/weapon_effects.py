@@ -39,7 +39,7 @@ def create_effect(effect, source, mount_point, target, time, duration):
     elif effect == WeaponEffects.ROCKET:
         return Rocket(source, get_slot_location(mount_point), target, time, duration)
     elif effect == WeaponEffects.BULLET:
-        return Bullet(source, get_slot_location(mount_point), target, time, duration)
+        return Bullet(source, get_slot_location(mount_point), target, time, 0.01)
     else:
         return None
 
@@ -80,16 +80,21 @@ class Beam(Drawable, StatefulObject):
         return done
 
 class Bullet(Drawable, StatefulObject):
-    def __init__(self, source, slot_location, target, time, duration):
+    def __init__(self, source, slot_location, target, time, speed):
         super(Bullet, self).__init__()
         self.source = source
         self.target = target
         self.start = time
-        self.duration = duration
         self.now = self.start
-        target_at = target.get_pos_at(time + duration)
+
+        s = (target.speed + 250) / 50
+        d = target.dist_to_mech()
+        
+        self.duration = d/s
+
         self.start_pos = source.get_pos().copy()
         self.start_pos.y += definitions.MECH_RADIUS * slot_location + randrange(-10, 10)
+        target_at = target.get_pos_at(time + self.duration)
         self.dx = target_at.x - self.start_pos.x
         self.dy = target_at.y - self.start_pos.y
 

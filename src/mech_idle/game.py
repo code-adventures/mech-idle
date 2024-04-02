@@ -36,7 +36,7 @@ class WaveController(StatefulObject):
             self.wave = self.wave + 1
             for x in range(randrange(1, 5)):
                 where = Vec2(definitions.ACTION_AREA.x + randrange(definitions.ACTION_AREA.x / 16) + 20, randrange(definitions.ACTION_AREA.y))
-                Enemy(where, randrange(2,10), 10, time, self.enemy_list)
+                Enemy(where, randrange(2,10), 100, time, self.enemy_list)
 
 class Game:
     def __init__(self):

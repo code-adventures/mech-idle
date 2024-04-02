@@ -1,3 +1,4 @@
+
 #
 #    Mech Idle - an idle mech game
 #    Copyright (C) 2024 Code Adventures
@@ -15,18 +16,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
-import imgui
 
-msgs = []
+from src.mech_idle import vec as vec
+from src.mech_idle.ui import definitions
 
-def add_msg(msg):
-    global msgs
-    msgs = (msgs + [msg])[-10:]
-
-def clear_msgs():
-    global msgs
-    msgs = []
-
-def print_msgs():
-    for msg in msgs:
-        imgui.text(msg)
+def test_action_windows_dimensions():
+    dim = definitions.action_window_dimensions()
+    assert type(dim) == vec.Vec2
