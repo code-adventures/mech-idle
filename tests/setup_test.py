@@ -16,37 +16,44 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import unittest
 from src.mech_idle import setup as setup
 from src.mech_idle import hull as hull
+from src.mech_idle import weapons
 
+def test_default_setup():
+    my_setup = setup.Setup()
+    assert my_setup.hull == None
+    assert my_setup.modules == dict()
 
-class setup_test(unittest.TestCase):
-    def test_default_setup(self):
-        my_setup = setup.Setup()
-        self.assertEqual(my_setup.hull, None)
-        self.assertEqual(my_setup.modules, dict())
+def test_empty_hull_but_modules():
+    my_setup = setup.Setup()
+    my_setup.setup(None, {hull.MountPoints.HEAD: [[1,2,3],[1,2,3]]})
+    assert my_setup.hull == None
+    assert my_setup.modules == dict()
 
-    def test_empty_hull_but_modules(self):
-        my_setup = setup.Setup()
-        my_setup.setup(None, {hull.MountPoints.HEAD: [[1,2,3],[1,2,3]]})
-        self.assertEqual(my_setup.hull, None)
-        self.assertEqual(my_setup.modules, dict())
+def test_empty_setup():
+    my_hull = hull.Hull(0, "Test", 1, hull.Hull.create_mountpoints(head=(1,1)))
+    my_setup = setup.Setup()
+    my_setup.setup(my_hull, dict())
+    assert my_setup.hull == my_hull
+    assert my_setup.modules == dict()
 
-    def test_empty_setup(self):
-        my_hull = hull.Hull(0, "Test", 1, hull.Hull.create_mountpoints(head=(1,1)))
-        my_setup = setup.Setup()
-        my_setup.setup(my_hull, dict())
-        self.assertEqual(my_setup.hull, my_hull)
-        self.assertEqual(my_setup.modules, dict())
+def test_too_long_setup():
+    my_hull = hull.Hull(0, "Test", 1, hull.Hull.create_mountpoints(head=(1,1)))
+    my_setup = setup.Setup()
+    my_setup.setup(my_hull, {hull.MountPoints.HEAD: [[1,2,3],[1,2,3]]})
+    assert my_setup.hull == my_hull
+    assert my_setup.modules == {hull.MountPoints.HEAD: [[1],[1]]}
 
-    def test_too_long_setup(self):
-        my_hull = hull.Hull(0, "Test", 1, hull.Hull.create_mountpoints(head=(1,1)))
-        my_setup = setup.Setup()
-        my_setup.setup(my_hull, {hull.MountPoints.HEAD: [[1,2,3],[1,2,3]]})
-        self.assertEqual(my_setup.hull, my_hull)
-        self.assertEqual(my_setup.modules, {hull.MountPoints.HEAD: [[1],[1]]})
+class Enemy_Mock:
+    pass
 
-if __name__ == '__main__':
-    unittest.main()
-        
+def test_shoot(mocker):
+    my_hull = hull.Hull(0, "Test", 1, hull.Hull.create_mountpoints(head=(1,1)))
+    my_setup = setup.Setup()
+    my_setup.setup(my_hull, {hull.MountPoints.HEAD: [[weapons.AutoCannon()],[]]})
+    m = mocker.patch('src.mech_idle.weapons.AutoCannon.shoot')
+    e = Enemy_Mock()
+    my_setup.shoot(None, 0, [e])
+    m.assert_called_once()
+    

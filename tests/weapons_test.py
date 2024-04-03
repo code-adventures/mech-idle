@@ -16,7 +16,6 @@
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 
-import unittest
 from src.mech_idle.vec import Vec2
 from src.mech_idle import weapons
 from src.mech_idle import weapon_effects
@@ -35,24 +34,62 @@ class source_target_mock():
     def dist_to_mech(self):
         return 10
 
+def test_create_effect():
+    source = source_target_mock()
+    target = source_target_mock()
+    time = 0
+    duration = 100
+    effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.ROCKET, source, MountPoints.LEFT_ARM, target, time, duration)
+    assert isinstance(effect, weapon_effects.Rocket)
 
+    effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.BEAM, source, MountPoints.LEFT_ARM, target, time, duration)
+    assert isinstance(effect, weapon_effects.Beam)
 
-class weapons_test(unittest.TestCase):
-    def test_create_effect(self):
-        source = source_target_mock()
-        target = source_target_mock()
-        time = 0
-        duration = 100
-        effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.ROCKET, source, MountPoints.LEFT_ARM, target, time, duration)
-        self.assertIsInstance(effect, weapon_effects.Rocket)
+    effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.BULLET, source, MountPoints.LEFT_ARM, target, time, duration)
+    assert isinstance(effect, weapon_effects.Bullet)
 
-        effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.BEAM, source, MountPoints.LEFT_ARM, target, time, duration)
-        self.assertIsInstance(effect, weapon_effects.Beam)
+def test_weapon_find_enemy():
+    target = source_target_mock()
+    weapon = weapons.AutoCannon()
+    enemy = weapon.find_enemy([(target, 10)])
+    assert enemy == target
 
-        effect = weapon_effects.create_effect(weapon_effects.WeaponEffects.BULLET, source, MountPoints.LEFT_ARM, target, time, duration)
-        self.assertIsInstance(effect, weapon_effects.Bullet)
+def test_weapon_find_enemy_enemy_to_far():
+    target = source_target_mock()
+    weapon = weapons.AutoCannon()
+    enemy = weapon.find_enemy([(target, 2000)])
+    assert enemy is None
 
+def test_weapon_find_enemy_no_enemies():
+    target = source_target_mock()
+    weapon = weapons.BeamLaser()
+    enemy = weapon.find_enemy([])
+    assert enemy is None
+    
+def test_weapon_shoot(mocker):
+    source = source_target_mock()
+    target = source_target_mock()
+    weapon = weapons.AutoCannon()
+    mocker.patch('src.mech_idle.weapons.Weapon.find_enemy', return_value=target)
+    m = mocker.patch('src.mech_idle.weapons.create_effect')
+    weapon.shoot(source, MountPoints.LEFT_ARM, 1000, [target])
+    assert weapon.last_shot == 1000
+    m.assert_called_once()
 
-if __name__ == '__main__':
-    unittest.main()
-        
+def test_weapon_shoot_no_enemy_in_range(mocker):
+    source = source_target_mock()
+    target = source_target_mock()
+    weapon = weapons.AutoCannon()
+    mocker.patch('src.mech_idle.weapons.Weapon.find_enemy', return_value=None)
+    m = mocker.patch('src.mech_idle.weapons.create_effect')
+    weapon.shoot(source, MountPoints.LEFT_ARM, 1000, [target])
+    assert weapon.last_shot == 0
+    m.assert_not_called()
+
+def test_weapon_shoot_no_enemy(mocker):
+    source = source_target_mock()
+    weapon = weapons.AutoCannon()
+    m = mocker.patch('src.mech_idle.weapons.create_effect')
+    weapon.shoot(source, MountPoints.LEFT_ARM, 1000, [])
+    assert weapon.last_shot == 0
+    m.assert_not_called()

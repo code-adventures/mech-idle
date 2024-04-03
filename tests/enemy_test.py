@@ -57,3 +57,31 @@ def test_get_pos_at():
 def test_dist_to_mech_at():
     e = enemy.Enemy(Vec2(definitions.MECH.x + 1000, definitions.MECH.y), 100, 100, 0, [])
     assert e.dist_to_mech_at(10) == 1000 - 10
+
+class transform:
+    def x(self, x):
+        return x
+    def y(self, y):
+        return y
+    def scale(self, scale):
+        return scale
+
+class drawlist:
+    def __init__(self):
+        self.draw_list = []
+    def add_circle(self, x, y, radius, color, thickness):
+        self.draw_list.append((x, y, radius, color, thickness))
+
+def test_draw(mocker):
+    mocker.patch('imgui.get_color_u32_rgba', return_value=0)
+    e = enemy.Enemy(Vec2(definitions.MECH.x + 1000, definitions.MECH.y), 100, 100, 0, [])
+    tf = transform()
+    dl = drawlist()
+    e.draw(tf, dl)
+    assert len(dl.draw_list) == 1
+    assert dl.draw_list[0][0] == definitions.MECH.x + 1000
+    assert dl.draw_list[0][1] == definitions.MECH.y
+    assert dl.draw_list[0][2] == definitions.ENEMY_RADIUS
+    assert dl.draw_list[0][3] == 0
+    assert dl.draw_list[0][4] == 2
+
